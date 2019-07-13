@@ -79,8 +79,7 @@ def main():
     load_dotenv()
     global redis_obj
     redis_obj = auth_on_redis()
-    req_kwargs = {'proxy_url': 'https://107.191.45.149:8163/'}
-    updater = Updater(getenv('TELEGRAM_TOKEN'), request_kwargs=req_kwargs)
+    updater = Updater(getenv('TELEGRAM_TOKEN'))
     dispatcher = updater.dispatcher
 
     conversation_handler = ConversationHandler(
