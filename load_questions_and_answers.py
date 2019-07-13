@@ -57,7 +57,7 @@ def get_dictionary_for_quiz():
                 answer = find_search_text(answer_pattern, paragraph)
 
             if question and answer:
-                questions_and_answers[f'qa:id:{question_and_answer_id}'] = dict(
+                questions_and_answers[f'question_{question_and_answer_id}'] = dict(
                     question=question,
                     answer=answer
                 )
