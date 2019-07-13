@@ -51,7 +51,7 @@ def handle_new_question_request(event, vk):
 
 
 def handle_give_up(event, vk):
-    key_for_player_question_ids = f'player_vk{event.user_id}:question_ids'
+    key_for_player_question_ids = f'player_vk_{event.user_id}:question_ids'
     last_player_question = get_last_player_question(
         redis_obj,
         key_for_player_question_ids
@@ -73,7 +73,7 @@ def handle_give_up(event, vk):
 
 
 def handle_solution_attempt(event, vk):
-    key_for_player_question_ids = f'player_vk{event.user_id}:question_ids'
+    key_for_player_question_ids = f'player_vk_{event.user_id}:question_ids'
     result = check_player_answer(
         redis_obj,
         event.text,
