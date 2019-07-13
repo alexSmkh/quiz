@@ -20,13 +20,13 @@ def check_player_answer(redis_obj, player_answer, key_for_player_question_ids):
 
 def get_last_player_question(redis_obj, key_for_player_question_ids):
     last_question_id = redis_obj.lindex(key_for_player_question_ids, -1)
-    raw_question = redis_obj.get(f'qa:id:{last_question_id}')
+    raw_question = redis_obj.get(f'question_{last_question_id}')
     question_and_answer = json.loads(raw_question, encoding='utf-8')
     return question_and_answer
 
 
 def get_question_and_answer(redis_obj, key_for_player_question_ids):
-    number_of_questions = int(redis_obj.get('qa:number_of_questions'))
+    number_of_questions = int(redis_obj.get('number_of_questions'))
 
     if redis_obj.exists(key_for_player_question_ids):
         user_question_ids = redis_obj.lrange(key_for_player_question_ids, 0, -1)
@@ -39,7 +39,7 @@ def get_question_and_answer(redis_obj, key_for_player_question_ids):
         question_id = randint(1, number_of_questions)
 
     redis_obj.rpush(key_for_player_question_ids, question_id)
-    raw_question = redis_obj.get(f'qa:id:{question_id}')
+    raw_question = redis_obj.get(f'question_{question_id}')
     question_and_answer = json.loads(raw_question, encoding='utf-8')
     return question_and_answer
 
@@ -50,7 +50,7 @@ def load_quiz_on_redis(redis_obj, quiz):
         qa_json = json.dumps(question_and_answer)
         redis_obj.set(qa_id, qa_json)
         number_of_questions += 1
-    redis_obj.set(f'qa:number_of_questions', number_of_questions)
+    redis_obj.set(f'number_of_questions', number_of_questions)
 
 
 def auth_on_redis():
