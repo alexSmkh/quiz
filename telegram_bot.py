@@ -72,7 +72,10 @@ def handle_give_up(bot, update):
 
 
 def cancel(bot, update):
-    pass
+    username = update.message.from_user.first_name
+    update.message.reply_text(
+        f'{username}, надеюсь, когда-нибудь мы сыграем вновь!')
+    return ConversationHandler.END
 
 
 def main():
