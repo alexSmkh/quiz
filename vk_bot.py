@@ -28,7 +28,7 @@ def build_keyboard(event, vk, message):
     )
 
 
-def start_chating(event, vk):
+def start_chatting(event, vk):
     username = vk.users.get(user_id=event.user_id)[0]['first_name']
     build_keyboard(
         event,
@@ -104,7 +104,7 @@ def main():
             elif event.text == 'Сдаться':
                 handle_give_up(event, vk)
             elif event.text == 'Начать':
-                start_chating(event, vk)
+                start_chatting(event, vk)
             else:
                 handle_solution_attempt(event, vk)
 
