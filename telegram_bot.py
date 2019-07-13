@@ -22,7 +22,7 @@ def start(bot, update):
     reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard)
     username = update.message.from_user.first_name
     update.message.reply_text(
-        text=f'{username}, привет! Я бот для викторин!',
+        text=f'{username}, привет! Я бот для викторин!\nНажми "Новый вопрос", чтобы начать игру.',
         reply_markup=reply_markup
     )
     return NEW_QUESTION_REQUEST
