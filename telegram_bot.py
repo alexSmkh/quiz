@@ -29,7 +29,7 @@ def start(bot, update):
 
 
 def handle_new_question_request(bot, update):
-    key_for_player_question_ids = f'telegram:player_{update.message.chat_id}:question_ids'
+    key_for_player_question_ids = f'player_tg_{update.message.chat_id}:question_ids'
     question_and_answer = get_question_and_answer(
         redis_obj,
         key_for_player_question_ids
@@ -39,7 +39,7 @@ def handle_new_question_request(bot, update):
 
 
 def handle_solution_attempt(bot, update):
-    key_for_player_question_ids = f'telegram:player_{update.message.chat_id}:question_ids'
+    key_for_player_question_ids = f'player_tg_{update.message.chat_id}:question_ids'
     result = check_player_answer(
         redis_obj,
         update.message.text,
@@ -55,7 +55,7 @@ def handle_solution_attempt(bot, update):
 
 
 def handle_give_up(bot, update):
-    key_for_player_question_ids = f'telegram:player_{update.message.chat_id}:question_ids'
+    key_for_player_question_ids = f'player_tg_{update.message.chat_id}:question_ids'
     last_player_question = get_last_player_question(
         redis_obj,
         key_for_player_question_ids
