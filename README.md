@@ -52,6 +52,7 @@ python vk_bot.py        # для VK
 * Создайте приложение
 * Запишите переменные окружения из файла `.env`
  в `Settings/Config vars/Reveal Config Vars`
+* Выполните развертывание
 * Включите нужного вам бота, кликнув по тумблеру в `Resources/Free Dynos`
 
 
