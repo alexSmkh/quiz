@@ -8,6 +8,22 @@ from formatting_answer import get_format_answer
 import redis
 
 
+def create_player_score(redis_obj, player_id):
+    redis_obj.set(f'{player_id}:win_record', 0)
+    redis_obj.set(f'{player_id}:loss_record', 0)
+
+
+def get_player_score(redis_obj, player_id):
+    return (
+        redis_obj.get(f'{player_id}:win_record'),
+        redis_obj.get(f'{player_id}:loss_record')
+    )
+
+
+def add_game_point(redis_obj, key_for_player_score):
+    redis_obj.incr(key_for_player_score)
+
+
 def check_player_answer(redis_obj, player_answer, key_for_player_question_ids):
     last_player_question = get_last_player_question(
         redis_obj,

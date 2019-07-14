@@ -5,6 +5,9 @@ from redis_tools import auth_on_redis
 from redis_tools import get_question_and_answer
 from redis_tools import get_last_player_question
 from redis_tools import check_player_answer
+from redis_tools import create_player_score
+from redis_tools import add_game_point
+from redis_tools import get_player_score
 
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
@@ -19,7 +22,7 @@ def build_keyboard(event, vk, message):
     keyboard.add_button('Сдаться', color=VkKeyboardColor.DEFAULT)
 
     keyboard.add_line()
-    keyboard.add_button('Счет', color=VkKeyboardColor.DEFAULT)
+    keyboard.add_button('Мой счет', color=VkKeyboardColor.DEFAULT)
     vk.messages.send(
         peer_id=event.user_id,
         random_id=random.randint(1, 1000),
@@ -30,6 +33,7 @@ def build_keyboard(event, vk, message):
 
 def start_chatting(event, vk):
     username = vk.users.get(user_id=event.user_id)[0]['first_name']
+    create_player_score(redis_obj, f'player_vk_{event.user_id}')
     build_keyboard(
         event,
         vk,
@@ -61,6 +65,10 @@ def handle_give_up(event, vk):
         message=f'Ответ:\n{last_player_question["answer"]}',
         random_id=random.randint(1, 1000)
     )
+    add_game_point(
+        redis_obj,
+        f'player_vk_{event.user_id}:loss_record'
+    )
     new_question = get_question_and_answer(
         redis_obj,
         key_for_player_question_ids
@@ -81,11 +89,31 @@ def handle_solution_attempt(event, vk):
     )
     if result:
         message = 'Правильно! Поздравляю! Для следующего вопроса нажми "Новый вопрос"'
+        add_game_point(
+            redis_obj,
+            f'player_vk_{event.user_id}:win_record'
+        )
     else:
         message = 'Неправильно... Попробуешь еще раз?'
+        add_game_point(
+            redis_obj,
+            f'player_vk_{event.user_id}:loss_record'
+        )
     vk.messages.send(
         user_id=event.user_id,
         message=message,
+        random_id=random.randint(1, 1000)
+    )
+
+
+def handle_player_score(event, vk):
+    win_record, loss_record = get_player_score(
+        redis_obj,
+        f'player_vk_{event.user_id}'
+    )
+    vk.messages.send(
+        user_id=event.user_id,
+        message=f'Ваш счет\nПравильные ответы: {win_record}\nНеправильные ответы: {loss_record}',
         random_id=random.randint(1, 1000)
     )
 
@@ -105,6 +133,8 @@ def main():
                 handle_give_up(event, vk)
             elif event.text == 'Начать':
                 start_chatting(event, vk)
+            elif event.text == 'Мой счет':
+                handle_player_score(event, vk)
             else:
                 handle_solution_attempt(event, vk)
 
