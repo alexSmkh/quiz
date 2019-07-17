@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import os
 
@@ -7,8 +8,11 @@ from redis_tools import auth_on_redis, load_quiz_on_redis
 
 
 def load_files():
-    for filename in os.listdir('./questions/'):
-        with open(f'./questions/{filename}', 'r', encoding='KOI8-R') as reader:
+    for filename in os.listdir(os.path.join(os.getcwd(), 'questions')):
+        with open(os.path.join(
+                os.getcwd(),
+                os.path.join('questions', filename)
+        ), 'r', encoding='KOI8-R') as reader:
             file = reader.read()
         yield file
 
