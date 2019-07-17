@@ -1,5 +1,4 @@
 from os import getenv
-from random import randint
 
 from redis_tools import auth_on_redis
 from redis_tools import get_question_and_answer
@@ -13,7 +12,6 @@ from dotenv import load_dotenv
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.ext import ConversationHandler, RegexHandler
-from telegram import Sticker
 
 
 NEW_QUESTION_REQUEST, SOLUTION_ATTEMPT, GIVE_UP = range(3)
