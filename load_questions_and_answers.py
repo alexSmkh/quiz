@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 import os
 
@@ -15,13 +14,6 @@ def load_files():
         ), 'r', encoding='KOI8-R') as reader:
             file = reader.read()
         yield file
-
-
-def read_next_file(generator):
-    try:
-        return next(generator)
-    except StopIteration:
-        return None
 
 
 def find_search_text(pattern, paragraph):
@@ -47,19 +39,13 @@ def get_dictionary_for_quiz():
     question = None
     answer = None
 
-    while True:
-        text = read_next_file(file_generator)
-        if text is None:
-            break
+    for text in file_generator:
         paragraphs = text.split('\n\n')
-
         for paragraph in paragraphs:
             if question is None:
                 question = find_search_text(question_pattern, paragraph)
-
             if answer is None:
                 answer = find_search_text(answer_pattern, paragraph)
-
             if question and answer:
                 questions_and_answers[f'question_{question_and_answer_id}'] = dict(
                     question=question,
