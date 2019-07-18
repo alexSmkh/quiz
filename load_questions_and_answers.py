@@ -1,10 +1,6 @@
 import re
 import os
 
-from dotenv import load_dotenv
-
-from redis_tools import auth_on_redis, load_quiz_on_redis
-
 
 def load_files():
     for filename in os.listdir(os.path.join(os.getcwd(), 'questions')):
@@ -32,8 +28,6 @@ def find_search_text(pattern, paragraph):
 
 def get_dictionary_for_quiz():
     file_generator = load_files()
-    questions_and_answers = {}
-    question_and_answer_id = 1
     question_pattern = 'Вопрос \d+:'
     answer_pattern = 'Ответ:'
     question = None
@@ -47,20 +41,7 @@ def get_dictionary_for_quiz():
             if answer is None:
                 answer = find_search_text(answer_pattern, paragraph)
             if question and answer:
-                questions_and_answers[f'question_{question_and_answer_id}'] = dict(
-                    question=question,
-                    answer=answer
-                )
-                question_and_answer_id += 1
+                yield question, answer
+
                 question = None
                 answer = None
-
-    return questions_and_answers
-
-
-if __name__ == '__main__':
-    load_dotenv()
-    redis_obj = auth_on_redis()
-    quiz = get_dictionary_for_quiz()
-    load_quiz_on_redis(redis_obj, quiz)
-

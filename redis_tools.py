@@ -4,8 +4,10 @@ from random import randint
 from random import choice
 
 from formatting_answer import get_format_answer
+from load_questions_and_answers import get_dictionary_for_quiz
 
 import redis
+from dotenv import load_dotenv
 
 
 def create_player_score(redis_obj, player_id):
@@ -60,11 +62,11 @@ def get_question_and_answer(redis_obj, key_for_player_question_ids):
     return question_and_answer
 
 
-def load_quiz_on_redis(redis_obj, quiz):
-    number_of_questions = 0
-    for qa_id, question_and_answer in quiz.items():
-        qa_json = json.dumps(question_and_answer)
-        redis_obj.set(qa_id, qa_json)
+def load_quiz_on_redis(redis_obj):
+    number_of_questions = 1
+    for question, answer in get_dictionary_for_quiz():
+        qa_json = json.dumps({'question': question, 'answer': answer})
+        redis_obj.set(f'question_{number_of_questions}', qa_json)
         number_of_questions += 1
     redis_obj.set(f'number_of_questions', number_of_questions)
 
@@ -77,3 +79,9 @@ def auth_on_redis():
         decode_responses=True,
     )
     return redis_obj
+
+
+if __name__=='__main__':
+    load_dotenv()
+    redis_obj = auth_on_redis()
+    load_quiz_on_redis(redis_obj)
