@@ -28,8 +28,8 @@ def find_search_text(pattern, paragraph):
 
 def get_dictionary_for_quiz():
     file_generator = load_files()
-    question_pattern = 'Вопрос \d+:'
-    answer_pattern = 'Ответ:'
+    question_pattern = r'Вопрос \d+:'
+    answer_pattern = r'Ответ:'
     question = None
     answer = None
 
