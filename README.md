@@ -31,7 +31,7 @@ REDIS_PASSWORD=password
 ## Подготовка к запуску 
 Выполните команду, чтобы загрузить вопросы-ответы из папки `questions` в БД
 ```python3
-python load_questions_and_answers.py
+python redis_tools.py
 ```
 ## Как запустить 
 Для изоляции проекта используйте [VirtualEnv](https://docs.python.org/3/library/venv.html)
@@ -54,5 +54,6 @@ python vk_bot.py        # для VK
  в `Settings/Config vars/Reveal Config Vars`
 * Выполните развертывание
 * Включите нужного вам бота, кликнув по тумблеру в `Resources/Free Dynos`
+
 
 
