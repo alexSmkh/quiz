@@ -13,23 +13,15 @@ def load_files():
 
 
 def find_search_text(pattern, paragraph):
-    len_of_newline_character = 1
-    index_for_end_of_block_title = 1
-
     match = re.search(pattern, paragraph)
     if match:
-        index_for_beginning_of_search_text = match.span()[
-                                              index_for_end_of_block_title
-                                             ] + len_of_newline_character
-        raw_text_string = paragraph[index_for_beginning_of_search_text:]
-        search_text = raw_text_string.replace('\n', ' ')
-        return search_text
+        return paragraph[match.span()[1]:]
 
 
 def get_dictionary_for_quiz():
     file_generator = load_files()
-    question_pattern = r'Вопрос \d+:'
-    answer_pattern = r'Ответ:'
+    question_pattern = r'(Вопрос \d+:\n)'
+    answer_pattern = r'(Ответ:\n)'
     question = None
     answer = None
 
