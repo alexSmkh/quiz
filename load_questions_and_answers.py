@@ -12,24 +12,16 @@ def load_files():
         yield file
 
 
-def find_search_text(pattern, paragraph):
-    len_of_newline_character = 1
-    index_for_end_of_block_title = 1
-
+def search_text(pattern, paragraph):
     match = re.search(pattern, paragraph)
     if match:
-        index_for_beginning_of_search_text = match.span()[
-                                              index_for_end_of_block_title
-                                             ] + len_of_newline_character
-        raw_text_string = paragraph[index_for_beginning_of_search_text:]
-        search_text = raw_text_string.replace('\n', ' ')
-        return search_text
+        return paragraph[match.span()[1]:]
 
 
 def get_dictionary_for_quiz():
     file_generator = load_files()
-    question_pattern = r'Вопрос \d+:'
-    answer_pattern = r'Ответ:'
+    question_pattern = r'(Вопрос \d+:\n)'
+    answer_pattern = r'(Ответ:\n)'
     question = None
     answer = None
 
@@ -37,9 +29,9 @@ def get_dictionary_for_quiz():
         paragraphs = text.split('\n\n')
         for paragraph in paragraphs:
             if question is None:
-                question = find_search_text(question_pattern, paragraph)
+                question = search_text(question_pattern, paragraph)
             if answer is None:
-                answer = find_search_text(answer_pattern, paragraph)
+                answer = search_text(answer_pattern, paragraph)
             if question and answer:
                 yield question, answer
 
